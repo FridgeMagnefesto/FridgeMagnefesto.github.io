@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fridge Magnefesto</title>
+</head>
+<body>
+    <style type="text/css">
+        body {
+            background-image: url(https://testdrive-archive.azurewebsites.net/graphics/magneticpoetry/fridge.png);
+            background-size: cover;
+        }
+
+        .magnet {
+            background: white;
+            width: fit-content;
+            height: fit-content;
+            padding: .1em .8em;
+            position: absolute;
+            cursor: move;
+            box-shadow: 2px 2px 0 darkslategray;
+        }
+
+        p {
+            margin: 0;
+            font-size: larger;
+        }
+    </style>
+
+    <template id="magnetTemplate">
+        <div class="magnet"><p></p></div>
+    </template>
+
+    <script>
+        const words = ['art', 'dead', 'is', 'create', 'and', 'make', 'see', 'we', 'want', 'will', 'no', 'with', 'great'];
+        words.forEach(createMagnet);
+
+        var magnets = document.getElementsByClassName("magnet");
+        for (var i = 0; i < magnets.length; i++) {
+            randomPos(magnets.item(i));
+            dragElement(magnets.item(i));
+        }
+
+        function createMagnet(word) {
+            var magnetTemplate = document.querySelector('#magnetTemplate');
+            var newMagnet = magnetTemplate.content.cloneNode(true);
+            var text = newMagnet.querySelector("p");
+            text.textContent = word;
+            document.body.appendChild(newMagnet);
+        }
+
+        function randomPos(element) {
+            var windowWidth = window.innerWidth;
+            var windowHeight = window.innerHeight;
+            element.style.top = getRandomInt(windowHeight - element.scrollHeight) + "px";
+            element.style.left = getRandomInt(windowWidth - element.scrollWidth) + "px";
+        }
+
+        function getRandomInt(max) {
+            return Math.floor(Math.random() * Math.floor(max));
+        }
+
+        function dragElement(element) {
+            var newPosX = 0, newPosY = 0, oldPosX = 0, oldPosY = 0;
+            element.onmousedown = dragMouseDown;
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                // get the mouse cursor position at startup:
+                oldPosX = e.clientX;
+                oldPosY = e.clientY;
+                document.onmouseup = closeDragElement;
+                // call a function whenever the cursor moves:
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                // calculate the new cursor position:
+                newPosX = oldPosX - e.clientX;
+                newPosY = oldPosY - e.clientY;
+                oldPosX = e.clientX;
+                oldPosY = e.clientY;
+                // set the element's new position:
+                element.style.top = (element.offsetTop - newPosY) + "px";
+                element.style.left = (element.offsetLeft - newPosX) + "px";
+            }
+
+            function closeDragElement() {
+                // stop moving when mouse button is released:
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+    </script>
+</body>
+</html>
