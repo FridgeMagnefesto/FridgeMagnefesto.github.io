@@ -40,6 +40,8 @@
         for (var i = 0; i < magnets.length; i++) {
             randomPos(magnets.item(i));
             dragElement(magnets.item(i));
+            var randomTilt = 2.5 - getRandomInt(5);
+            magnets.item(i).style.transform = 'rotate(' + randomTilt + 'deg)';
         }
 
         function createMagnet(word) {
@@ -53,8 +55,8 @@
         function randomPos(element) {
             var windowWidth = window.innerWidth;
             var windowHeight = window.innerHeight;
-            element.style.top = getRandomInt(windowHeight - element.scrollHeight) + "px";
-            element.style.left = getRandomInt(windowWidth - element.scrollWidth) + "px";
+            element.style.top = 30 + getRandomInt(windowHeight - element.scrollHeight -60) + "px";
+            element.style.left = 30 + getRandomInt(windowWidth - element.scrollWidth -60) + "px";
         }
 
         function getRandomInt(max) {
